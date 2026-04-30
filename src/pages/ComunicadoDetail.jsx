@@ -126,6 +126,24 @@ export default function ComunicadoDetail({ id }) {
             </div>
             <p className="detail-title">{data.classificacao_descricao}</p>
           </Card>
+         <Card elevated padding="lg" className="stack stack-md">
+          <div className="row row-between">
+            <span className="text-section">Comunicação</span>
+
+            {data.comunicado_gestor === false && (
+              <Badge variant="warning">Não comunicado</Badge>
+            )}
+
+            {data.comunicado_gestor === true && (
+              <Badge variant="success">Comunicado</Badge>
+            )}
+          </div>
+
+          <p className="detail-title">
+            Foi comunicado ao gestor da área:{' '}
+            <strong>{data.comunicado_gestor ? 'Sim' : 'Não'}</strong>
+          </p>
+        </Card>
 
           <Card padding="lg" className="stack stack-sm">
             <span className="text-section">Identificação</span>

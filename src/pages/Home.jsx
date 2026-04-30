@@ -52,10 +52,10 @@ const emptyForm = () => {
     descricao: '',
     acoes: '',
     altoRisco: '',
+    comunicadoGestor: '',   // ✅ NOVO CAMPO
     fotos: [],
   }
 }
-
 export default function Home() {
   const [form, setForm] = useState(emptyForm)
   const [step, setStep] = useState(0)
@@ -326,6 +326,7 @@ export default function Home() {
         descricao_observado:  form.descricao.trim(),
         acoes_imediatas:      form.acoes.trim(),
         alto_risco_potencial: form.altoRisco === 'sim',
+        comunicado_gestor:    form.comunicadoGestor === 'sim', // ✅ NOVO
         itens_observados_ids: form.observacoes.map(Number),
         fotos,
       }
@@ -519,41 +520,56 @@ export default function Home() {
         )}
 
         {step === 4 && (
-          <div className="stack stack-md">
-            <Card padding="lg" className="stack stack-md">
-              <Field label="Breve descrição do que foi observado" required>
-                <TextArea
-                  rows={5}
-                  value={form.descricao}
-                  onChange={onInput('descricao')}
-                  placeholder="O que aconteceu, quando e onde"
-                />
-              </Field>
-              <Field label="O que fiz a respeito (ações imediatas)" required>
-                <TextArea
-                  rows={5}
-                  value={form.acoes}
-                  onChange={onInput('acoes')}
-                  placeholder="Ação tomada no momento"
-                />
-              </Field>
-            </Card>
+  <div className="stack stack-md">
+    <Card padding="lg" className="stack stack-md">
+      <Field label="Breve descrição do que foi observado" required>
+        <TextArea
+          rows={5}
+          value={form.descricao}
+          onChange={onInput('descricao')}
+          placeholder="O que aconteceu, quando e onde"
+        />
+      </Field>
 
-            <Card elevated padding="lg">
-              <Field label="A classificação deste reporte é de Alto Risco Potencial?" required>
-                <RadioGroup
-                  name="altoRisco"
-                  value={form.altoRisco}
-                  onChange={set('altoRisco')}
-                  options={[
-                    { value: 'sim', label: 'Sim' },
-                    { value: 'nao', label: 'Não' },
-                  ]}
-                />
-              </Field>
-            </Card>
-          </div>
-        )}
+      <Field label="O que fiz a respeito (ações imediatas)" required>
+        <TextArea
+          rows={5}
+          value={form.acoes}
+          onChange={onInput('acoes')}
+          placeholder="Ação tomada no momento"
+        />
+      </Field>
+    </Card>
+
+    <Card elevated padding="lg" className="stack stack-md" style={{ marginBottom: '16px' }}>
+      <Field label="A classificação deste reporte é de Alto Risco Potencial?" required>
+        <RadioGroup
+          name="altoRisco"
+          value={form.altoRisco}
+          onChange={set('altoRisco')}
+          options={[
+            { value: 'sim', label: 'Sim' },
+            { value: 'nao', label: 'Não' },
+          ]}
+        />
+      </Field>
+</Card>
+    <Card elevated padding="lg" className="stack stack-md">
+      {/* ✅ NOVO CAMPO – AGORA NO LUGAR CERTO */}
+      <Field label="Foi comunicado ao gestor da área?" required>
+        <RadioGroup
+          name="comunicadoGestor"
+          value={form.comunicadoGestor}
+          onChange={set('comunicadoGestor')}
+          options={[
+            { value: 'sim', label: 'Sim' },
+            { value: 'nao', label: 'Não' },
+          ]}
+        />
+      </Field>
+    </Card>
+  </div>
+)}
 
         {step === 5 && (
           <div className="stack stack-md">

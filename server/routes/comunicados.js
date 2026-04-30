@@ -325,7 +325,7 @@ router.get('/:id(\\d+)', canView, async (req, res) => {
       `SELECT c.id, c.data_comunicado, c.hora_comunicado,
               c.atividade, c.intervencao_por, c.matricula, c.funcao,
               c.outros_descricao, c.descricao_observado, c.acoes_imediatas,
-              c.alto_risco_potencial, c.criado_em,
+              c.alto_risco_potencial,c.comunicado_gestor, c.criado_em,
               c.classificacao_id, c.filial_id, c.area_id, c.setor_id, c.subsetor,
               cl.descricao     AS classificacao_descricao,
               f.descricao      AS filial_descricao,
@@ -401,30 +401,30 @@ router.post('/', canCreate, async (req, res) => {
   const client = await pool.connect()
   try {
     await client.query('BEGIN')
-
-    const { rows: [created] } = await client.query(
-      `INSERT INTO fato_comunicado (
-          classificacao_id, filial_id, area_id, setor_id, subsetor,
-          data_comunicado, hora_comunicado,
-          atividade,
-          intervencao_por, matricula, funcao,
-          outros_descricao,
-          descricao_observado, acoes_imediatas,
-          alto_risco_potencial
-       )
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
-       RETURNING id, criado_em`,
-      [
-        d.classificacao_id, d.filial_id, d.area_id, d.setor_id, d.subsetor,
-        d.data_comunicado, d.hora_comunicado,
-        d.atividade,
-        d.intervencao_por, d.matricula, d.funcao,
-        d.outros_descricao,
-        d.descricao_observado, d.acoes_imediatas,
-        d.alto_risco_potencial,
-      ]
-    )
-
+const { rows: [created] } = await client.query(
+  `INSERT INTO fato_comunicado (
+      classificacao_id, filial_id, area_id, setor_id, subsetor,
+      data_comunicado, hora_comunicado,
+      atividade,
+      intervencao_por, matricula, funcao,
+      outros_descricao,
+      descricao_observado, acoes_imediatas,
+      alto_risco_potencial,
+      comunicado_gestor
+   )
+   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+   RETURNING id, criado_em`,
+  [
+    d.classificacao_id, d.filial_id, d.area_id, d.setor_id, d.subsetor,
+    d.data_comunicado, d.hora_comunicado,
+    d.atividade,
+    d.intervencao_por, d.matricula, d.funcao,
+    d.outros_descricao,
+    d.descricao_observado, d.acoes_imediatas,
+    d.alto_risco_potencial,
+    d.comunicado_gestor, // ✅ NOVO PARÂMETRO
+  ]
+)
     // Ponte N:N — itens observados
     if (d.itens_observados_ids.length > 0) {
       const values = d.itens_observados_ids
