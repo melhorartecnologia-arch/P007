@@ -17,3 +17,4 @@ export const pool = new Pool({
 pool.on('error', (err) => {
   console.error('[db] erro inesperado em conexão ociosa:', err)
 })
+``
